@@ -30,6 +30,8 @@ formatted = ', '.join(f'"{word}"' for word in word_candidates)
 jslist = f"words = [{formatted}]\n"
 
 jsscript = """
+found_words = Array.from(document.querySelectorAll('.sb-anagram')).map(el => el.textContent);
+words = words.filter((word) => !found_words.has(word))
 async function typeWords() {
     const enterKeyUp = new KeyboardEvent('keyup', {
         bubbles: true,
@@ -70,7 +72,8 @@ async function typeWords() {
 
         document.body.dispatchEvent(enterKeyDown);
         document.body.dispatchEvent(enterKeyUp);
-        await new Promise(r => setTimeout(r, 2000));
+        
+        await new Promise(r => setTimeout(r, $('.error-message') ? 2000 : 100));
     };
 }
 typeWords();
